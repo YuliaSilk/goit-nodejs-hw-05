@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticate, isEmptyBody, isValidId } from '../middlewares/index.js';
+import { authenticate, isEmptyBody, upload } from '../middlewares/index.js';
 import {validateBody} from "../decorators/index.js";
 import { userSignupSchema, userSigninSchema } from '../models/User.js';
 import authController from '../controllers/auth-controller.js';
@@ -11,7 +11,9 @@ authRouter.post("/signin", isEmptyBody, validateBody(userSigninSchema), authCont
 
 authRouter.get("/current", authenticate, authController.getCurrent);
 
-authRouter.post("/signout", authenticate,authController.signout);
+authRouter.post("/signout", authenticate, authController.signout);
+
+authRouter.patch("/users/avatars", authenticate, authController.updateAvatar)
 
 
 export default authRouter;

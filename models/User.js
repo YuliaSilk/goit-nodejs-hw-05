@@ -20,6 +20,10 @@ const userSchema = new Schema({
         enum: ["starter", "pro", "business"],
         default: "starter"
     },
+    avatarURL: {
+        type: String,
+        required: true,
+    },
     token: {
         type: String,
     }
@@ -35,6 +39,7 @@ userSchema.post("findOneAndUpdate", handleSaveError);
 export const userSignupSchema = Joi.object({
     password: Joi.string().required(),
     email: Joi.string().pattern(emailRegex).required(),
+    avatarURL: Joi.string().required(),
 })
 
 export const userSigninSchema = Joi.object({

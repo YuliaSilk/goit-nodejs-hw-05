@@ -4,8 +4,16 @@ import { ctrlWrapper } from "../decorators/index.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import "dotenv/config.js";
+import fs from "fs/promises";
+import path from "path";
+import gravatar from "gravatar";
+import Jimp from "jimp";
 
 const {JWT_SECRET} = process.env;
+
+const avatarsPath = path.resolve("public", "avatars");
+
+export const avatarURL = gravatar.url("email", { s: '250', r: 'pg', d: 'indection' });
 
 const signup = async(req, res) => {
     const {email, password} = req.body;
@@ -63,9 +71,30 @@ const signout = async(req, res) => {
     })
 }
 
+const updateAvatar = async(req, res) => {
+    try {
+        const image = await Jimp.read(req.file.buffer);
+        image.resize(250, 250);
+        const fileName = `${Date.now()} - ${Math.floor(Math.random() * 1000)}.png`;
+        const filePath = path.join();
+        const {path: oldPath, filename} = req.file;
+        const newPath = path.join(avatarsPath, filename);
+        await fs.rename(oldPath, newPath);
+        const avatar = path.join("avatars", filename);
+        image.write(filePath);
+        req.user.avatarURL = `/avatars/${fileName}`;
+        res.status(200).json({ avatarURL: req.user.avatarURL });
+    } catch (error) {
+        next(HttpError(401, error.message))
+    }
+   
+}
+
+
 export default {
     singup: ctrlWrapper(signup),
     signin: ctrlWrapper(signin),
     getCurrent: ctrlWrapper(getCurrent),
     signout: ctrlWrapper(signout),
+    updateAvatar: ctrlWrapper(updateAvatar),
 }
