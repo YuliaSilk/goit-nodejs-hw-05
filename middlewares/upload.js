@@ -27,18 +27,6 @@ const fileFilter = (req, file, callback) => {
     }
 }
 
-
-// const image = await Jimp.read(error, avatarURL) => {
-//     if(error) throw(HttpError(401, "Not authorized"));
-//     avatarURL
-//     .resize(250, 250)
-//     .write(__filename)
-// };
-
-
-
-
-
 const upload = multer({
     storage,
     limits,

@@ -13,7 +13,7 @@ authRouter.get("/current", authenticate, authController.getCurrent);
 
 authRouter.post("/signout", authenticate, authController.signout);
 
-authRouter.patch("/users/avatars", authenticate, authController.updateAvatar)
+authRouter.patch("/users/avatars", authenticate, upload.single("avatar"), authController.updateAvatar)
 
 
 export default authRouter;
