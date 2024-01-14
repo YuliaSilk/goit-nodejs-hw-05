@@ -25,7 +25,7 @@ const userSchema = new Schema({
     },
     avatarURL: {
         type: String,
-        // required: true,
+        required: true,
     },
       
 }, {versionKey: false, timestamps:true});
@@ -39,7 +39,6 @@ userSchema.post("findOneAndUpdate", handleSaveError);
 export const userSignupSchema = Joi.object({
     password: Joi.string().required(),
     email: Joi.string().pattern(emailRegex).required(),
-    // avatarURL: Joi.string().required(),
 })
 
 export const userSigninSchema = Joi.object({

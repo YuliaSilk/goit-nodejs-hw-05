@@ -23,7 +23,7 @@ const signup = async(req, res) => {
     const hashPassword = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
 
-    const newUser = await User.create({...req.body, password: hashPassword}, avatarURL);
+    const newUser = await User.create({...req.body, password: hashPassword, avatarURL} );
     res.json({
     email: newUser.email,
      })
@@ -70,30 +70,53 @@ const signout = async(req, res) => {
     })
 }
 
-const updateAvatar = async(req, res) => {
-    try {
-        const {_id} = req.user;
-        const fileName = `${Date.now()} - ${Math.floor(Math.random() * 1000)}.png`;
-        const filePath = path.join();
-        const {path: oldPath, filename} = req.file;
-        const newPath = path.join(avatarsPath, filename);
-        await fs.rename(oldPath, newPath);
-        const avatarURL = path.join("avatars", filename);
-        await User.findByIdAndUpdate(_id, {avatarURL});
+// const updateAvatar = async(req, res) => {
+//     try {
+//         const {_id} = req.user;
+//         const fileName = `${Date.now()} - ${Math.floor(Math.random() * 1000)}.png`;
+//         const filePath = path.join();
+//         const {path: oldPath, filename} = req.file;
+//         const newPath = path.join(avatarsPath, filename);
+//         await fs.rename(oldPath, newPath);
+//         const avatarURL = path.join("avatars", filename);
+//         await User.findByIdAndUpdate(_id, { avatarURL });
 
 
-        const image = await Jimp.read(req.file.buffer);
-        image.resize(250, 250);
-        image.write(filePath);
+//         const image = await Jimp.read(req.file.buffer);
+//         image.resize(250, 250);
+//         image.write(filePath);
 
-        req.user.avatarURL = `/avatars/${fileName}`;
-        res.status(200).json({ avatarURL });
-    } catch (error) {
-        next(HttpError(401, error.message))
-    }
+//         req.user.avatarURL = `/avatars/${fileName}`;
+//         res.status(200).json({ avatarURL });
+//     } catch (error) {
+//         next(HttpError(401, error.message))
+//     }
    
-}
+// }
 
+const updateAvatar = async (req, res, next) => {
+    try {
+      const { _id } = req.user;
+      const fileName = `${Date.now()}-${Math.floor(Math.random() * 1000)}.png`;
+      const filePath = path.join(avatarsPath, fileName);
+      const { path: oldPath, filename } = req.file;
+      const newPath = path.join(avatarsPath, filename);
+      await fs.rename(oldPath, newPath);
+      const avatarURL = path.join("avatars", filename);
+  
+      const image = await Jimp.read(filePath);
+      image.resize(250, 250);
+      image.write(filePath);
+  
+      await User.findByIdAndUpdate(_id, 
+        { $set: { avatarURL } },
+        { new: true });
+  
+      res.status(200).json({ avatarURL });
+    } catch (error) {
+      next(HttpError(401, error.message));
+    }
+  };
 
 export default {
     singup: ctrlWrapper(signup),

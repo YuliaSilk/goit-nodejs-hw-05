@@ -3,7 +3,7 @@ import path from "path";
 import {HttpError} from "../helpers/index.js";
 import gravatar from "gravatar";
 import Jimp from "jimp";
-import { error } from "console";
+
 
 const destination = path.resolve("tmp");
 
@@ -30,7 +30,7 @@ const fileFilter = (req, file, callback) => {
 const upload = multer({
     storage,
     limits,
-    fileFilter,
+    // fileFilter,
 })
 
 export default upload;
