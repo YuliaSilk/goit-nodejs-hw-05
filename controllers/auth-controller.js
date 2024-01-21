@@ -28,7 +28,7 @@ const signup = async(req, res) => {
    
     const verifyEmail = {
         to: email,
-        subject: "verify email",
+        subject: "Verify email",
         html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationCode}">Click to verify email</a>`
     }
 
@@ -38,6 +38,7 @@ const signup = async(req, res) => {
     email: newUser.email,
      })   
 }
+
 
 const verify = async(req, res) => {
     const {verificationCode} = req.params;
@@ -53,6 +54,12 @@ const verify = async(req, res) => {
     })    
 }
 
+// const verifyEmail = {
+//     to: email,
+//     subject: "Verify email",
+//     html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationCode}">Click to verify email</a>`
+// }
+
 const resendVerifyEmail = async(req, res) => {
     const {email} = req.body;
     const user = await User.findOne({email});
@@ -61,7 +68,7 @@ const resendVerifyEmail = async(req, res) => {
     }
 
     if(user.verify) {
-        throw HttpError(400, "Email is already");
+        throw HttpError(400, "Email is already varify");
     }
     const verifyEmail = {
         to: email,
@@ -98,6 +105,8 @@ const signin = async(req, res) => {
 
     const token = jwt.sign(payload, JWT_SECRET, {expiresIn: "23h"});
     await User.findByIdAndUpdate(id, {token});
+
+   
 
     res.json({
         token,
