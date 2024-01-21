@@ -11,7 +11,7 @@ const verificationCode = nanoid();
 
 const sendEmail = async() => {
     const msg = {
-        to: 'hegnonofye@gufum.com', // Change to your recipient
+        to: 'kurtanerku@gufum.com', // Change to your recipient
         from: SENDGRID_EMAIL_FROM, // Change to your verified sender
         subject: 'HTML',
         text: 'Click to verify email',

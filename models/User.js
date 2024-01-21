@@ -31,6 +31,9 @@ const userSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    verificationCode: {
+        type: String,
+    }
         
 }, {versionKey: false, timestamps:true});
 
