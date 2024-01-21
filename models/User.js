@@ -27,7 +27,11 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-      
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+        
 }, {versionKey: false, timestamps:true});
 
 userSchema.post("save", handleSaveError);
@@ -45,6 +49,12 @@ export const userSigninSchema = Joi.object({
     password: Joi.string().required(),
     email: Joi.string().pattern(emailRegex).required(),
 })
+
+
+export const userEmailSchema = Joi.object({
+    email: Joi.string().pattern(emailRegex).required(),
+})
+
 
 const User = model("user", userSchema);
 
